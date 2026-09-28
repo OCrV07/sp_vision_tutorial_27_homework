@@ -5,14 +5,17 @@
 
 int counter = 0;
 
-constexpr int N = 50000;  // 常量表达式，强制要求在编译期确定值
+constexpr int N = 100000;  // 常量表达式，强制要求在编译期确定值
 
 std::mutex mutex;
 
 void work()
 {
   for (int i = 0; i < N; ++i) {
+    std::lock_guard guard(mutex);
+    // mutex.lock();
     counter++;
+    // mutex.unlock();
   }
 }
 

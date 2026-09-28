@@ -1,0 +1,1 @@
+/usr/bin/c++ CMakeFiles/frame_integrity_test.dir/tests/test_frame.cpp.o -o frame_integrity_test  libmini_vision_lib.a /usr/lib/x86_64-linux-gnu/libopencv_imgcodecs.so.4.5.4d /usr/lib/x86_64-linux-gnu/libopencv_imgproc.so.4.5.4d /usr/lib/x86_64-linux-gnu/libopencv_core.so.4.5.4d 

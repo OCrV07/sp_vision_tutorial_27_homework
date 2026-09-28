@@ -1,0 +1,41 @@
+[0.785s] Invoking command in '/home/ocrv/sp_vision_tutorial_27/lecture4/src/ep2/topic_learning_sub': PYTHONPATH=/home/ocrv/sp_vision_tutorial_27/lecture4/build/topic_learning_sub/prefix_override:/usr/lib/python3/dist-packages/colcon_core/task/python/colcon_distutils_commands:/home/ocrv/sp_vision_tutorial_27/lecture4/install/topic_learning_sub/lib/python3.10/site-packages:${PYTHONPATH} /usr/bin/python3 -W ignore:setup.py install is deprecated -W ignore:easy_install command is deprecated setup.py egg_info --egg-base ../../../build/topic_learning_sub build --build-base /home/ocrv/sp_vision_tutorial_27/lecture4/build/topic_learning_sub/build install --record /home/ocrv/sp_vision_tutorial_27/lecture4/build/topic_learning_sub/install.log --install-scripts $base/lib/topic_learning_sub --single-version-externally-managed install_data
+[1.209s] running egg_info
+[1.211s] creating ../../../build/topic_learning_sub/topic_learning_sub.egg-info
+[1.212s] writing ../../../build/topic_learning_sub/topic_learning_sub.egg-info/PKG-INFO
+[1.212s] writing dependency_links to ../../../build/topic_learning_sub/topic_learning_sub.egg-info/dependency_links.txt
+[1.215s] writing entry points to ../../../build/topic_learning_sub/topic_learning_sub.egg-info/entry_points.txt
+[1.215s] writing requirements to ../../../build/topic_learning_sub/topic_learning_sub.egg-info/requires.txt
+[1.215s] writing top-level names to ../../../build/topic_learning_sub/topic_learning_sub.egg-info/top_level.txt
+[1.215s] writing manifest file '../../../build/topic_learning_sub/topic_learning_sub.egg-info/SOURCES.txt'
+[1.221s] reading manifest file '../../../build/topic_learning_sub/topic_learning_sub.egg-info/SOURCES.txt'
+[1.222s] writing manifest file '../../../build/topic_learning_sub/topic_learning_sub.egg-info/SOURCES.txt'
+[1.222s] running build
+[1.222s] running build_py
+[1.222s] creating /home/ocrv/sp_vision_tutorial_27/lecture4/build/topic_learning_sub/build
+[1.222s] creating /home/ocrv/sp_vision_tutorial_27/lecture4/build/topic_learning_sub/build/lib
+[1.222s] creating /home/ocrv/sp_vision_tutorial_27/lecture4/build/topic_learning_sub/build/lib/topic_learning_sub
+[1.222s] copying topic_learning_sub/qos_subscriber.py -> /home/ocrv/sp_vision_tutorial_27/lecture4/build/topic_learning_sub/build/lib/topic_learning_sub
+[1.222s] copying topic_learning_sub/__init__.py -> /home/ocrv/sp_vision_tutorial_27/lecture4/build/topic_learning_sub/build/lib/topic_learning_sub
+[1.223s] copying topic_learning_sub/subscriber_node.py -> /home/ocrv/sp_vision_tutorial_27/lecture4/build/topic_learning_sub/build/lib/topic_learning_sub
+[1.223s] running install
+[1.227s] running install_lib
+[1.227s] creating /home/ocrv/sp_vision_tutorial_27/lecture4/install/topic_learning_sub/lib/python3.10/site-packages/topic_learning_sub
+[1.227s] copying /home/ocrv/sp_vision_tutorial_27/lecture4/build/topic_learning_sub/build/lib/topic_learning_sub/qos_subscriber.py -> /home/ocrv/sp_vision_tutorial_27/lecture4/install/topic_learning_sub/lib/python3.10/site-packages/topic_learning_sub
+[1.227s] copying /home/ocrv/sp_vision_tutorial_27/lecture4/build/topic_learning_sub/build/lib/topic_learning_sub/__init__.py -> /home/ocrv/sp_vision_tutorial_27/lecture4/install/topic_learning_sub/lib/python3.10/site-packages/topic_learning_sub
+[1.227s] copying /home/ocrv/sp_vision_tutorial_27/lecture4/build/topic_learning_sub/build/lib/topic_learning_sub/subscriber_node.py -> /home/ocrv/sp_vision_tutorial_27/lecture4/install/topic_learning_sub/lib/python3.10/site-packages/topic_learning_sub
+[1.228s] byte-compiling /home/ocrv/sp_vision_tutorial_27/lecture4/install/topic_learning_sub/lib/python3.10/site-packages/topic_learning_sub/qos_subscriber.py to qos_subscriber.cpython-310.pyc
+[1.231s] byte-compiling /home/ocrv/sp_vision_tutorial_27/lecture4/install/topic_learning_sub/lib/python3.10/site-packages/topic_learning_sub/__init__.py to __init__.cpython-310.pyc
+[1.231s] byte-compiling /home/ocrv/sp_vision_tutorial_27/lecture4/install/topic_learning_sub/lib/python3.10/site-packages/topic_learning_sub/subscriber_node.py to subscriber_node.cpython-310.pyc
+[1.231s] running install_data
+[1.231s] creating /home/ocrv/sp_vision_tutorial_27/lecture4/install/topic_learning_sub/share/ament_index
+[1.231s] creating /home/ocrv/sp_vision_tutorial_27/lecture4/install/topic_learning_sub/share/ament_index/resource_index
+[1.231s] creating /home/ocrv/sp_vision_tutorial_27/lecture4/install/topic_learning_sub/share/ament_index/resource_index/packages
+[1.231s] copying resource/topic_learning_sub -> /home/ocrv/sp_vision_tutorial_27/lecture4/install/topic_learning_sub/share/ament_index/resource_index/packages
+[1.232s] copying package.xml -> /home/ocrv/sp_vision_tutorial_27/lecture4/install/topic_learning_sub/share/topic_learning_sub
+[1.234s] running install_egg_info
+[1.238s] Copying ../../../build/topic_learning_sub/topic_learning_sub.egg-info to /home/ocrv/sp_vision_tutorial_27/lecture4/install/topic_learning_sub/lib/python3.10/site-packages/topic_learning_sub-0.0.0-py3.10.egg-info
+[1.241s] running install_scripts
+[1.285s] Installing qos_subscriber script to /home/ocrv/sp_vision_tutorial_27/lecture4/install/topic_learning_sub/lib/topic_learning_sub
+[1.286s] Installing subscriber_node script to /home/ocrv/sp_vision_tutorial_27/lecture4/install/topic_learning_sub/lib/topic_learning_sub
+[1.286s] writing list of installed files to '/home/ocrv/sp_vision_tutorial_27/lecture4/build/topic_learning_sub/install.log'
+[1.328s] Invoked command in '/home/ocrv/sp_vision_tutorial_27/lecture4/src/ep2/topic_learning_sub' returned '0': PYTHONPATH=/home/ocrv/sp_vision_tutorial_27/lecture4/build/topic_learning_sub/prefix_override:/usr/lib/python3/dist-packages/colcon_core/task/python/colcon_distutils_commands:/home/ocrv/sp_vision_tutorial_27/lecture4/install/topic_learning_sub/lib/python3.10/site-packages:${PYTHONPATH} /usr/bin/python3 -W ignore:setup.py install is deprecated -W ignore:easy_install command is deprecated setup.py egg_info --egg-base ../../../build/topic_learning_sub build --build-base /home/ocrv/sp_vision_tutorial_27/lecture4/build/topic_learning_sub/build install --record /home/ocrv/sp_vision_tutorial_27/lecture4/build/topic_learning_sub/install.log --install-scripts $base/lib/topic_learning_sub --single-version-externally-managed install_data

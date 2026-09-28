@@ -37,7 +37,10 @@ Pipeline::Pipeline(std::unique_ptr<FrameSource> source, PipelineConfig config)
 
 Pipeline::~Pipeline()
 {
-    // TODO: Make sure Pipeline never destroys running threads.
+    // wait() 等待生产者线程结束 遍历所有工作线程 对仍处于运行状态的线程调用 join()
+    // 即使调用方没有显式执行 pipeline.wait()，在 Pipeline 对象销毁时也会自动等待所有线程结束，
+    // 避免 std::thread 仍处于可连接状态时析构，从而触发 std::terminate()
+    wait();
 }
 
 void Pipeline::start()

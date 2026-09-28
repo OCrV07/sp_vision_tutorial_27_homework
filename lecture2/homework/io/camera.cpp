@@ -40,7 +40,7 @@ Camera::Camera() : handle_(nullptr), opened_(false), grabbing_(false)
     ret = MV_CC_SetFloatValue(handle_, "ExposureTime", 10000);
     check(ret, "Set ExposureTime failed");
 
-    ret = MV_CC_SetFloatValue(handle_, "Gain", 20);
+    ret = MV_CC_SetFloatValue(handle_, "Gain", 0);
     check(ret, "Set Gain failed");
 
     ret = MV_CC_SetFrameRate(handle_, 60);

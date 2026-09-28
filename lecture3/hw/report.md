@@ -9,7 +9,7 @@
 意味着什么。说明你的修改让一个 `Frame` 在进入队列后拥有什么，并解释为何后续读取
 不会再改变它。
 
-TODO(report)：在此作答。
+为了减少频繁分配内存的开销，OpenCV 在尺寸和类型不变时可能继续使用 buffer_ 已经分配的底层像素内存; cv::Mat 的普通复制通常是浅复制, 比如原来 src/frame_source.cpp 中的 frame.image = buffer_; 只会复制 cv::Mat 的矩阵头，并增加底层数据的引用计数，不会复制实际像素。因此，frame.image 和 buffer_ 会指向同一块像素内存。下一次读取图像并覆写 buffer_ 时，已经进入队列的旧帧内容也可能随之改变，导致其实际校验值与 expected_checksum 不一致; 而改为 frame.image = buffer_.clone(); 后，clone() 会为当前帧分配独立的像素内存，并把 buffer_ 中的数据完整复制过去。因此，进入队列的每个 Frame 都拥有一份独立的图像数据。之后即使图像源继续复用和覆写 buffer_，也不会改变已经产生的帧
 
 ## 2. 并发处理与恰好一次
 
@@ -17,14 +17,21 @@ TODO(report)：在此作答。
 为什么你的实现既不会漏掉已经入队的帧，也不会重复处理同一帧？输入耗尽时，正在等待
 以及仍在处理数据的 worker 分别会怎样？
 
-TODO(report)：在此作答。
+多个 worker 共享同一个 BlockingQueue<Frame>。producer 通过 push() 将帧放入队列，worker 则循环调用 pop() 获取帧。队列使用互斥锁保护内部的 std::queue，因此任意时刻只有一个 worker 能够取出队首元素。一个元素被移动给某个 worker 后会立即从队列中删除，所以同一帧不会被多个 worker 重复获取。
+每个成功入队的帧会一直保留在队列中，直到某个 worker 将其取出。producer 读取完全部输入后才调用 queue_.close()。关闭队列并不会丢弃其中已有的元素：如果队列仍然非空，pop() 仍会返回帧，让 worker 继续处理剩余数据。只有当队列已经关闭并且为空时，pop() 才返回 false，worker 随后退出循环。
+输入耗尽时，正在 pop() 中等待的 worker 会被 close() 中的 notify_all() 唤醒。若队列中还有帧，它们会继续竞争并取出这些帧；若队列已空，则 pop() 返回 false，worker 结束。已经取到帧并正在处理的 worker 不会被强制中断，它会完成当前帧的处理和保存，然后再次调用 pop()。此时如果队列已经关闭且为空，它才退出。
+因此，成功入队的帧既不会被遗漏，也不会被重复处理
 
 ## 3. 共享统计数据
 
 指出哪些线程会读写 `Statistics`。解释原实现中的竞争为什么可能导致错误结果，并说明
 你的同步方案提供了什么保证。还应说明取得快照时为什么是安全的。
 
-TODO(report)：在此作答。
+producer 线程调用 Statistics::onProduced() 更新 produced。多个 worker 线程会根据处理结果调用 onProcessed()、onSaved() 和 onCorrupted()。主线程还可能通过 Pipeline::statistics() 调用 snapshot() 读取统计结果。
+原实现使用普通 int 保存计数，并通过“读取旧值、加一、写回”的方式更新。两个 worker 可能同时读到相同的旧值，分别加一后再写回相同的新值，导致其中一次更新丢失。不受同步保护地读写同一个变量的数据竞争存在风险。
+修改后，Statistics 中增加了同一个互斥锁：mutable std::mutex mutex_;
+四个更新函数都先创建 std::lock_guard，持有互斥锁后再修改计数器。因此同一时间只有一个线程可以执行统计更新，完整的“读取、加一、写回”过程不会被其他线程打断，也不会发生计数丢失。
+snapshot() 也持有同一个互斥锁后再读取四个计数器，保证读取期间没有线程能够修改这些字段，返回的四项数据来自同一个受保护的状态，不会与并发写入发生数据竞争
 
 ## 4. 线程关闭协议
 
@@ -36,6 +43,11 @@ TODO(report)：在此作答。
 
 如果你的实现允许某个生命周期方法被重复调用，也请说明其行为；如果不允许，请说明前置条件。
 
-TODO(report)：在此作答。
+调用 start() 时，程序先创建所有 worker 线程，然后创建 producer 线程。worker 如果暂时没有数据，会阻塞在队列的 pop() 中；producer 持续产生帧，输入耗尽后调用 queue_.close()。
+1. 当调用者显式执行 wait() 时，wait() 首先检查 producer 是否仍然可连接。如果是，就调用 join() 等待 producer 完成。producer 在正常结束前会关闭队列，从而唤醒等待中的 worker。worker 会处理完队列里的剩余帧，随后在队列关闭且为空时退出。wait() 再逐个 join() 所有仍可连接的 worker，确保它们全部结束后才返回。
+2. 如果调用者没有显式执行 wait()，Pipeline 的析构函数会自动调用 wait()，执行相同的关闭和回收流程。因此，在 source_、queue_、processor_、statistics_ 等成员被销毁以前，所有使用这些成员的线程都已经退出，不会出现线程访问已销毁对象的悬空访问。
+每次调用 join() 前都会使用 joinable() 检查线程是否仍可连接。线程被 join() 后不再可连接，因此显式调用过 wait() 后，析构函数再次调用 wait() 只会跳过已经回收的线程，不会重复 join()。这也避免了对不可连接线程调用 join() 所产生的异常。
+最终，producer_ 和 workers_ 中的 std::thread 对象被销毁时都不再处于可连接状态，因此不会触发 std::terminate。队列关闭时会唤醒所有等待者，且 worker 会在队列关闭并清空后退出，因此正常执行路径中不会永久等待。
+当前实现要求 start() 对同一个 Pipeline 对象只调用一次。wait() 可以重复调用，也可以在 start() 前调用；由于它会检查 joinable()，这些额外调用不会产生实际效果
 
 

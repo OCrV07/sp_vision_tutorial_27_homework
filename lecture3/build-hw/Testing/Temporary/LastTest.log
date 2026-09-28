@@ -1,0 +1,19 @@
+Start testing: Sep 28 11:35 CST
+----------------------------------------------------------
+2/4 Testing: statistics_test
+2/4 Test: statistics_test
+Command: "/home/ocrv/sp_vision_tutorial_27/lecture3/build-hw/statistics_test"
+Directory: /home/ocrv/sp_vision_tutorial_27/lecture3/hw
+"statistics_test" start time: Sep 28 11:35 CST
+Output:
+----------------------------------------------------------
+PASS: shared statistics are correct
+<end of output>
+Test time =   0.10 sec
+----------------------------------------------------------
+Test Passed.
+"statistics_test" end time: Sep 28 11:35 CST
+"statistics_test" time elapsed: 00:00:00
+----------------------------------------------------------
+
+End testing: Sep 28 11:35 CST

@@ -1,0 +1,41 @@
+[0.021s] Invoking command in '/home/ocrv/sp_vision_tutorial_27/lecture4/build/launch_learning': AMENT_PREFIX_PATH=/home/ocrv/sp_vision_tutorial_27/lecture4/install/topic_learning_sub:/home/ocrv/sp_vision_tutorial_27/lecture4/install/topic_learning_pub:${AMENT_PREFIX_PATH} CMAKE_PREFIX_PATH=/home/ocrv/sp_vision_tutorial_27/lecture4/install/topic_learning_pub:/opt/ros/humble PYTHONPATH=/home/ocrv/sp_vision_tutorial_27/lecture4/install/topic_learning_sub/lib/python3.10/site-packages:${PYTHONPATH} /usr/bin/cmake /home/ocrv/sp_vision_tutorial_27/lecture4/src/ep3/launch_learning -DCMAKE_INSTALL_PREFIX=/home/ocrv/sp_vision_tutorial_27/lecture4/install/launch_learning
+[0.155s] -- The C compiler identification is GNU 11.4.0
+[0.268s] -- The CXX compiler identification is GNU 11.4.0
+[0.281s] -- Detecting C compiler ABI info
+[0.452s] -- Detecting C compiler ABI info - done
+[0.459s] -- Check for working C compiler: /usr/bin/cc - skipped
+[0.459s] -- Detecting C compile features
+[0.464s] -- Detecting C compile features - done
+[0.471s] -- Detecting CXX compiler ABI info
+[0.659s] -- Detecting CXX compiler ABI info - done
+[0.670s] -- Check for working CXX compiler: /usr/bin/c++ - skipped
+[0.672s] -- Detecting CXX compile features
+[0.672s] -- Detecting CXX compile features - done
+[0.677s] -- Found ament_cmake: 1.3.14 (/opt/ros/humble/share/ament_cmake/cmake)
+[0.909s] -- Found Python3: /usr/bin/python3 (found version "3.10.12") found components: Interpreter 
+[1.478s] -- Configuring done
+[1.490s] -- Generating done
+[1.496s] -- Build files have been written to: /home/ocrv/sp_vision_tutorial_27/lecture4/build/launch_learning
+[1.508s] Invoked command in '/home/ocrv/sp_vision_tutorial_27/lecture4/build/launch_learning' returned '0': AMENT_PREFIX_PATH=/home/ocrv/sp_vision_tutorial_27/lecture4/install/topic_learning_sub:/home/ocrv/sp_vision_tutorial_27/lecture4/install/topic_learning_pub:${AMENT_PREFIX_PATH} CMAKE_PREFIX_PATH=/home/ocrv/sp_vision_tutorial_27/lecture4/install/topic_learning_pub:/opt/ros/humble PYTHONPATH=/home/ocrv/sp_vision_tutorial_27/lecture4/install/topic_learning_sub/lib/python3.10/site-packages:${PYTHONPATH} /usr/bin/cmake /home/ocrv/sp_vision_tutorial_27/lecture4/src/ep3/launch_learning -DCMAKE_INSTALL_PREFIX=/home/ocrv/sp_vision_tutorial_27/lecture4/install/launch_learning
+[1.515s] Invoking command in '/home/ocrv/sp_vision_tutorial_27/lecture4/build/launch_learning': AMENT_PREFIX_PATH=/home/ocrv/sp_vision_tutorial_27/lecture4/install/topic_learning_sub:/home/ocrv/sp_vision_tutorial_27/lecture4/install/topic_learning_pub:${AMENT_PREFIX_PATH} CMAKE_PREFIX_PATH=/home/ocrv/sp_vision_tutorial_27/lecture4/install/topic_learning_pub:/opt/ros/humble PYTHONPATH=/home/ocrv/sp_vision_tutorial_27/lecture4/install/topic_learning_sub/lib/python3.10/site-packages:${PYTHONPATH} /usr/bin/cmake --build /home/ocrv/sp_vision_tutorial_27/lecture4/build/launch_learning -- -j4 -l4
+[1.614s] Invoked command in '/home/ocrv/sp_vision_tutorial_27/lecture4/build/launch_learning' returned '0': AMENT_PREFIX_PATH=/home/ocrv/sp_vision_tutorial_27/lecture4/install/topic_learning_sub:/home/ocrv/sp_vision_tutorial_27/lecture4/install/topic_learning_pub:${AMENT_PREFIX_PATH} CMAKE_PREFIX_PATH=/home/ocrv/sp_vision_tutorial_27/lecture4/install/topic_learning_pub:/opt/ros/humble PYTHONPATH=/home/ocrv/sp_vision_tutorial_27/lecture4/install/topic_learning_sub/lib/python3.10/site-packages:${PYTHONPATH} /usr/bin/cmake --build /home/ocrv/sp_vision_tutorial_27/lecture4/build/launch_learning -- -j4 -l4
+[1.614s] Invoking command in '/home/ocrv/sp_vision_tutorial_27/lecture4/build/launch_learning': AMENT_PREFIX_PATH=/home/ocrv/sp_vision_tutorial_27/lecture4/install/topic_learning_sub:/home/ocrv/sp_vision_tutorial_27/lecture4/install/topic_learning_pub:${AMENT_PREFIX_PATH} CMAKE_PREFIX_PATH=/home/ocrv/sp_vision_tutorial_27/lecture4/install/topic_learning_pub:/opt/ros/humble PYTHONPATH=/home/ocrv/sp_vision_tutorial_27/lecture4/install/topic_learning_sub/lib/python3.10/site-packages:${PYTHONPATH} /usr/bin/cmake --install /home/ocrv/sp_vision_tutorial_27/lecture4/build/launch_learning
+[1.630s] -- Install configuration: ""
+[1.630s] -- Installing: /home/ocrv/sp_vision_tutorial_27/lecture4/install/launch_learning/share/launch_learning/launch
+[1.630s] -- Installing: /home/ocrv/sp_vision_tutorial_27/lecture4/install/launch_learning/share/launch_learning/launch/basic.launch.py
+[1.630s] -- Installing: /home/ocrv/sp_vision_tutorial_27/lecture4/install/launch_learning/share/ament_index/resource_index/package_run_dependencies/launch_learning
+[1.633s] -- Installing: /home/ocrv/sp_vision_tutorial_27/lecture4/install/launch_learning/share/ament_index/resource_index/parent_prefix_path/launch_learning
+[1.633s] -- Installing: /home/ocrv/sp_vision_tutorial_27/lecture4/install/launch_learning/share/launch_learning/environment/ament_prefix_path.sh
+[1.633s] -- Installing: /home/ocrv/sp_vision_tutorial_27/lecture4/install/launch_learning/share/launch_learning/environment/ament_prefix_path.dsv
+[1.633s] -- Installing: /home/ocrv/sp_vision_tutorial_27/lecture4/install/launch_learning/share/launch_learning/environment/path.sh
+[1.633s] -- Installing: /home/ocrv/sp_vision_tutorial_27/lecture4/install/launch_learning/share/launch_learning/environment/path.dsv
+[1.633s] -- Installing: /home/ocrv/sp_vision_tutorial_27/lecture4/install/launch_learning/share/launch_learning/local_setup.bash
+[1.634s] -- Installing: /home/ocrv/sp_vision_tutorial_27/lecture4/install/launch_learning/share/launch_learning/local_setup.sh
+[1.634s] -- Installing: /home/ocrv/sp_vision_tutorial_27/lecture4/install/launch_learning/share/launch_learning/local_setup.zsh
+[1.634s] -- Installing: /home/ocrv/sp_vision_tutorial_27/lecture4/install/launch_learning/share/launch_learning/local_setup.dsv
+[1.636s] -- Installing: /home/ocrv/sp_vision_tutorial_27/lecture4/install/launch_learning/share/launch_learning/package.dsv
+[1.639s] -- Installing: /home/ocrv/sp_vision_tutorial_27/lecture4/install/launch_learning/share/ament_index/resource_index/packages/launch_learning
+[1.639s] -- Installing: /home/ocrv/sp_vision_tutorial_27/lecture4/install/launch_learning/share/launch_learning/cmake/launch_learningConfig.cmake
+[1.639s] -- Installing: /home/ocrv/sp_vision_tutorial_27/lecture4/install/launch_learning/share/launch_learning/cmake/launch_learningConfig-version.cmake
+[1.639s] -- Installing: /home/ocrv/sp_vision_tutorial_27/lecture4/install/launch_learning/share/launch_learning/package.xml
+[1.642s] Invoked command in '/home/ocrv/sp_vision_tutorial_27/lecture4/build/launch_learning' returned '0': AMENT_PREFIX_PATH=/home/ocrv/sp_vision_tutorial_27/lecture4/install/topic_learning_sub:/home/ocrv/sp_vision_tutorial_27/lecture4/install/topic_learning_pub:${AMENT_PREFIX_PATH} CMAKE_PREFIX_PATH=/home/ocrv/sp_vision_tutorial_27/lecture4/install/topic_learning_pub:/opt/ros/humble PYTHONPATH=/home/ocrv/sp_vision_tutorial_27/lecture4/install/topic_learning_sub/lib/python3.10/site-packages:${PYTHONPATH} /usr/bin/cmake --install /home/ocrv/sp_vision_tutorial_27/lecture4/build/launch_learning
