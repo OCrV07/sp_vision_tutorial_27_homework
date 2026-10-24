@@ -25,8 +25,8 @@ public:
 
   Target() = default;
   Target(
-    const Armor & armor, std::chrono::steady_clock::time_point t, double radius = 0.2,
-    int armor_num = 4);
+    const Armor & armor, std::chrono::steady_clock::time_point t, double radius = -1.0,
+    int armor_num = 0);
 
   void predict(std::chrono::steady_clock::time_point t);
   void predict(double dt);
@@ -47,6 +47,7 @@ public:
   bool checkinit();
 
 private:
+  friend struct TargetModelTestAccess;
   int armor_num_;
   int switch_count_;
   int update_count_;

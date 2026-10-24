@@ -8,6 +8,7 @@ add_library(auto_aim OBJECT
     armor.cpp
     solver.cpp
     target.cpp
+    outpost_aim.cpp
     yolo.cpp
     yolos/yolov5.cpp
 )

@@ -16,7 +16,7 @@ Target::Target(
   jumped(false),
   last_id(0),
   isinit(true),
-  armor_num_(armor_num > 0 ? armor_num : (armor.name == ArmorName::outpost ? 3 : 4)),
+  armor_num_(armor.name == ArmorName::outpost ? 3 : (armor_num > 0 ? armor_num : 4)),
   switch_count_(0),
   update_count_(0),
   is_switch_(false),
@@ -40,13 +40,18 @@ Target::Target(
   // l: dh1 for outpost / r2 - r1 for vehicles
   // h: dh2 for outpost / z2 - z1 for vehicles
   Eigen::VectorXd x0{{center_x, 0, center_y, 0, center_z, 0, ypr[0], 0, r, 0, 0}};  //初始化预测量
+  // Task_2：r、l、h 的初始标准差分别取 5、5、10 cm，协方差填标准差的平方。
+  // 几何量未知，不能把初始方差设为零，否则换板后仍无法估计它们。
   Eigen::VectorXd P0_dig_car{
-    {1, 64, 1, 64, 1, 64, 0.4, 100, 0, 0,
-     0}};  // Task_2 TODO: 根据实际情况，调整“后三项”预测量协方差矩阵参数
+    {1, 64, 1, 64, 1, 64, 0.4, 100, 0.05 * 0.05, 0.05 * 0.05, 0.10 * 0.10}};
 
-  // Task_3 TODO: 为前哨站建立专有的初始状预测量及其协方差矩阵参数（P0_dig_outpost）
-
-  Eigen::Matrix<double, 11, 11> P0 = P0_dig_car.asDiagonal();
+  // Task_3：第 0 板就是首次观测的板，z0 取实测值，未知层高差从零开始学习。
+  // 半径有较强的尺寸先验；l/h 必须保留方差，且不能预设板序或转动方向。
+  const Eigen::VectorXd P0_dig_outpost{
+    {0.1 * 0.1, 0.2 * 0.2, 0.1 * 0.1, 0.2 * 0.2, 0.05 * 0.05, 0.02 * 0.02,
+     0.4, 25, 0.005 * 0.005, 0.15 * 0.15, 0.15 * 0.15}};
+  Eigen::Matrix<double, 11, 11> P0 =
+    (is_layered_outpost() ? P0_dig_outpost : P0_dig_car).asDiagonal();
 
   // 防止夹角求和出现异常值
   auto x_add = [](const Eigen::VectorXd & a, const Eigen::VectorXd & b) -> Eigen::VectorXd {
@@ -61,12 +66,14 @@ Target::Target(
 void Target::predict(std::chrono::steady_clock::time_point t)
 {
   auto dt = tools::delta_time(t, t_);
+  if (dt < 0) return;  // 不让乱序图像把滤波器推进到过去。
   predict(dt);
   t_ = t;
 }
 
 void Target::predict(double dt)
 {
+  if (!std::isfinite(dt) || dt < 0) return;
   // 状态转移矩阵
   // clang-format off
   Eigen::MatrixXd F{
@@ -86,12 +93,12 @@ void Target::predict(double dt)
 
   // Piecewise White Noise Model
   // https://github.com/rlabbe/Kalman-and-Bayesian-Filters-in-Python/blob/master/07-Kalman-Filter-Math.ipynb
-  double v1, v2;
-
-  // Task_2 TODO: 根据实际情况，调整v1与v2
-  v1 = 1;           // 加速度方差
-  v2 = 1;           // 角加速度方差
-  double v1_z = 1;  // z轴加速度方差
+  // Task_2：固定靶机中心应较平稳；角速度保留响应换档的能力。
+  // 这是调试起点，分别对应平移 0.5 m/s²、转动 5 rad/s² 的标准差。
+  // 前哨站匀速转动，降低角加速度噪声；仍允许机器人缓慢移动引起的相对平移。
+  const double v1 = is_layered_outpost() ? 0.2 * 0.2 : 0.5 * 0.5;
+  const double v2 = is_layered_outpost() ? 1.0 * 1.0 : 5.0 * 5.0;
+  const double v1_z = is_layered_outpost() ? 0.02 * 0.02 : 0.2 * 0.2;
 
   auto a = dt * dt * dt * dt / 4;
   auto b = dt * dt * dt / 2;
@@ -126,7 +133,7 @@ void Target::predict(double dt)
 void Target::update(const Armor & armor)
 {
   // 装甲板匹配
-  int id;
+  int id = 0;
   auto min_angle_error = 1e10;
   const std::vector<Eigen::Vector4d> & xyza_list = armor_xyza_list();
 
@@ -143,8 +150,9 @@ void Target::update(const Armor & armor)
       return ypd1[2] < ypd2[2];
     });
 
-  // 取前3个distance最小的装甲板
-  for (int i = 0; i < 3; i++) {
+  // 最多检查最近的三块板，也兼容显式传入的二板模型。
+  const int candidate_count = std::min(3, static_cast<int>(xyza_i_list.size()));
+  for (int i = 0; i < candidate_count; i++) {
     const auto & xyza = xyza_i_list[i].first;
     Eigen::Vector3d ypd = tools::xyz2ypd(xyza.head(3));
     auto angle_error = std::abs(tools::limit_rad(armor.ypr_in_world[0] - xyza[3])) +
@@ -179,10 +187,11 @@ void Target::update_ypda(const Armor & armor, int id)
   //观测jacobi
   Eigen::MatrixXd H = h_jacobian(ekf_.x, id);
 
-  H.block<3, 1>(0, 6).setZero();
+  // 前哨站半径已知，位置中的相位信息有助于测速，使用完整的数学雅可比。
+  if (!is_layered_outpost()) H.block<3, 1>(0, 6).setZero();
 
   // 首次换板前冻结几何参数；换板后允许单板观测更新半径及高度差。
-  if (!rlh_initialized_) {
+  if (!is_layered_outpost() && !rlh_initialized_) {
     H.block<4, 3>(0, 8).setZero();
   }
   // 随距自适应量测噪声
@@ -240,9 +249,17 @@ std::vector<Eigen::Vector4d> Target::armor_xyza_list() const
 
 bool Target::diverged() const
 {
+  if (!ekf_.x.allFinite() || !ekf_.P.allFinite()) return true;
   auto r_ok = ekf_.x[8] > 0.05 && ekf_.x[8] < 0.5;
 
-  //Task_3 TODO: 为前哨站建立专有的发散判定条件
+  if (is_layered_outpost()) {
+    // 这里只排除不合理状态；层高尚未学到时为零是合法初值。
+    // 三层是否接近 0.1 m 间距由射击收敛判定另行检查。
+    const bool radius_ok = std::abs(ekf_.x[8] - 0.2765) < 0.04;
+    const bool height_ok = std::abs(ekf_.x[9]) < 0.30 && std::abs(ekf_.x[10]) < 0.30 &&
+                           std::abs(ekf_.x[9] - ekf_.x[10]) < 0.30;
+    return !radius_ok || !height_ok || ekf_.P.diagonal().minCoeff() < 0;
+  }
 
   auto l_ok = ekf_.x[8] + ekf_.x[9] > 0.05 && ekf_.x[8] + ekf_.x[9] < 0.5;
 
@@ -275,8 +292,9 @@ Eigen::Vector3d Target::h_armor_xyz(const Eigen::VectorXd & x, int id) const
   auto armor_x = x[0] - r * std::cos(angle);
   auto armor_y = x[2] - r * std::sin(angle);
 
-  double dh = 0.0;  // 高度差
-  // Task_3 TODO: 为前哨站建立专有的高度差计算方法
+  // Task_2：第 1、3 块板采用另一组半径和高度，须与雅可比 dz_dh 一致。
+  double dh = use_l_h ? x[10] : 0.0;
+  if (use_outpost_h) dh = id == 1 ? x[9] : (id == 2 ? x[10] : 0.0);
 
   auto armor_z = x[4] + dh;  //task_3 tips
 
@@ -298,16 +316,14 @@ Eigen::MatrixXd Target::h_jacobian(const Eigen::VectorXd & x, int id) const
   auto dx_dl = (use_l_h) ? -std::cos(angle) : 0.0;
   auto dy_dl = (use_l_h) ? -std::sin(angle) : 0.0;
 
-  auto dz_dh = use_l_h ? 1.0 : 0.0;
-
-  //  Task_3 tips:
-  // auto dz_dl = 0.0; // Task_3 TODO: 为前哨站建立专有的雅各比阵计算方法
+  auto dz_dh = (use_l_h || (use_outpost_h && id == 2)) ? 1.0 : 0.0;
+  auto dz_dl = (use_outpost_h && id == 1) ? 1.0 : 0.0;
 
   // clang-format off
   Eigen::MatrixXd H_armor_xyza{
     {1, 0, 0, 0, 0, 0, dx_da, 0, dx_dr, dx_dl,     0},
     {0, 0, 1, 0, 0, 0, dy_da, 0, dy_dr, dy_dl,     0},
-    {0, 0, 0, 0, 1, 0,     0, 0,     0,     0, dz_dh},
+    {0, 0, 0, 0, 1, 0,     0, 0,     0, dz_dl, dz_dh},
     {0, 0, 0, 0, 0, 0,     1, 0,     0,     0,     0}
   };
   // clang-format on

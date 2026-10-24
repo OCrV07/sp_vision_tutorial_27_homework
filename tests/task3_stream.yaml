@@ -1,0 +1,9 @@
+# 仅供软件测试使用的理想相机，不可作为实机标定。
+enemy_color: red
+yaw_offset: 0
+pitch_offset: 0
+R_gimbal2imubody: [1, 0, 0, 0, 1, 0, 0, 0, 1]
+R_camera2gimbal: [0, 0, 1, -1, 0, 0, 0, -1, 0]
+t_camera2gimbal: [0, 0, 0]
+camera_matrix: [1800, 0, 720, 0, 1800, 540, 0, 0, 1]
+distort_coeffs: [0, 0, 0, 0, 0]

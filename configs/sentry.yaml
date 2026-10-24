@@ -20,6 +20,14 @@ threshold: 100
 yaw_offset: 2 # degree -2.5
 pitch_offset: 6.5 # degree 2
 
+#####-----任务三：前哨站-----#####
+task3_execution_delay_ms: 15.0 # 未包含在图像时间戳到当前时刻中的执行延迟
+task3_pitch_limit_deg: 20.0 # 调试起点，按哨兵实测机械范围核对
+# disabled: 只跟踪/测速；continuous: 电控按 12 Hz 发弹；single: 每包单发，最多 12 Hz 请求。
+# 先与电控确认 fire 语义，以及独立开火挡位会在 30 s 正式计时期间门控实际射击。
+task3_fire_mode: disabled
+task3_external_fire_gate_confirmed: false
+
 camera_name: "hikrobot"
 exposure_ms: 5.0
 gain: 16.9

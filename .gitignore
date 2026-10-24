@@ -14,3 +14,14 @@ watchdog.sh
 records_24/
 records_25/
 partterns/
+
+# Local assignment notes and reference materials
+/PROJECT_GUIDE.md
+/ASSIGNMENT_WORKFLOW.md
+/TASK3_NOTES.md
+/27算法组自瞄方向招新大作业/
+
+# Local agent and environment directories
+/.agents/
+/.codex/
+/.aws/
