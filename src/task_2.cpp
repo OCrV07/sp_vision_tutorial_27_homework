@@ -173,7 +173,7 @@ AimSolution predict_aim(
     result.valid = true;
     result.id = chosen;
     result.yaw = std::atan2(point[1], point[0]) + params.yaw_offset;
-    result.pitch = std::atan2(point[2], distance) + params.pitch_offset;
+    result.pitch = -std::atan2(point[2], distance) + params.pitch_offset;
     result.horizon = horizon;
     result.yaw_tolerance = std::atan2(
       (target.armor_type == auto_aim::big ? 0.230 : 0.135) / 4.0, distance);
@@ -188,7 +188,7 @@ AimSolution predict_aim(
       trajectory.fly_time > 1.0) {
       return result;
     }
-    result.pitch = trajectory.pitch + params.pitch_offset;
+    result.pitch = -trajectory.pitch + params.pitch_offset;
     result.fly_time = trajectory.fly_time;
     // 飞行时间迭代、正对程度和俯仰范围都通过，才允许进入射击判断。
     result.fireable = std::abs(trajectory.fly_time - flight) < 0.002 &&

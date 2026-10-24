@@ -98,7 +98,7 @@ AimSolution predict_aim(
     result.id = chosen;
     result.height = point[2];
     result.yaw = std::atan2(point[1], point[0]) + params.yaw_offset;
-    result.pitch = std::atan2(point[2], distance) + params.pitch_offset;
+    result.pitch = -std::atan2(point[2], distance) + params.pitch_offset;
     result.horizon = horizon;
     result.yaw_tolerance = std::atan2(0.129 * std::cos(facing) / 4.0, distance);
     result.pitch_tolerance = std::atan2(0.056 / 4.0, distance);
@@ -110,7 +110,7 @@ AimSolution predict_aim(
       !std::isfinite(trajectory.fly_time) || trajectory.fly_time <= 0 || trajectory.fly_time > 1) {
       return result;
     }
-    result.pitch = trajectory.pitch + params.pitch_offset;
+    result.pitch = -trajectory.pitch + params.pitch_offset;
     result.fly_time = trajectory.fly_time;
     result.fireable = std::abs(trajectory.fly_time - flight) < 0.002 && facing < 45.0 * DEG &&
                       std::abs(result.pitch) <= params.pitch_limit;

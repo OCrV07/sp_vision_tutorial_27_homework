@@ -194,7 +194,7 @@ int main(int argc, char * argv[])
             const double target_yaw =
               std::atan2(last_position.y(), last_position.x()) + yaw_offset;
             const double target_pitch = std::clamp(
-              std::atan2(last_position.z(), std::hypot(last_position.x(), last_position.y())) +
+              -std::atan2(last_position.z(), std::hypot(last_position.x(), last_position.y())) +
                 pitch_offset,
               -pitch_limit, pitch_limit);
 
@@ -255,3 +255,4 @@ int main(int argc, char * argv[])
 
   return 0;
 }
+
